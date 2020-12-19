@@ -1,5 +1,7 @@
 const express = require('express');
 const dotenv = require('dotenv')
+const routers = require('./routers/index');
+
 
 // Environment Variables
 dotenv.config({
@@ -9,9 +11,11 @@ dotenv.config({
 const app = express();
 const PORT = process.env.PORT;
 
+// Routers Middlewares
+app.use("/api",routers);
+
 
 app.get("/",(req,res) => {
-
     res.send("my API");
 });
 
