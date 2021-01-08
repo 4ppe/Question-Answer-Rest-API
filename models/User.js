@@ -1,5 +1,4 @@
 const mongoose = require("mongoose")
-
 const Schema = mongoose.Schema()
 
 const UserSchema = new Schema({
@@ -7,48 +6,41 @@ const UserSchema = new Schema({
         type:String,
         required : [true, "Please provide a name"]
     },
-    email : {
-        type : String,
-        required : true,
-        unique : [true, "This e-mail is already in use, please try different one"],
-        match : [
+    email: {
+        type: String,
+        required: true,
+        unique: [true, "This e-mail is already in use, please try different one"],
+        match: [
             /^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/,
             "Please provide a valid email"
         ]
     },
-    role : {
-        type : String,
-        default : "user",
-        enum : ["user", "admin"]
+    role: {
+        type: String,
+        default: "user",
+        enum: ["user", "admin"]
     },
-    password : {
-        min : [6, "Please provide a password with min length 6"],
-        required : [true, "Please provide a password"],
-        select : false // security
+    password: { 
+        type: String, 
+        required: [true, "Please provide a password"],
+        select: false,
+        minlength:[6, "Password length must be at least 6"]
     },
-    createdAt : {
-        type : Date,
-        default : Date.now
+    createdAt: {
+        type: Date,
+        default: Date.now
     },
-    title : {
-        type : String
+    title:   String,
+    about:   String,
+    place:   String,
+    website: String,
+    profile_image: {
+        type: String,
+        default: "default.jpg"
     },
-    about : {
-        type : String
-    },
-    place : {
-        type : String
-    },
-    website : {
-        type : String
-    },
-    profile_image : {
-        type : String,
-        default : "default.jpg"
-    },
-    blocked : {
-        type : Boolean,
-        default : false
+    blocked: {
+        type: Boolean,
+        default: false
     }
   });
 
