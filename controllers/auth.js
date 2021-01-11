@@ -1,11 +1,12 @@
 const User = require("../models/User");
 const CustomError = require("../helpers/error/CustomError");
+const asyncHandler = require('express-async-handler')
 
-const register = async (req,res,next) => {
+const register = asyncHandler(async (req,res,next) => {
     // TODO: POST DATA
     const name = "Alpvczazaer"
-    const email = "alpfdvcer1@alper.com"
-    const password = "12fd3123123"
+    const email = "alpfdvce77r1@alper.com"
+    const password = "123"
 
     const user = await User.create({
         name,
@@ -19,7 +20,7 @@ const register = async (req,res,next) => {
         success: true,
         data: user
     })
-}
+})
 
 // TEST
 const errorTest = (req,res,next) => {
