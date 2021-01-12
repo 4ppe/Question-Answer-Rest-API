@@ -4,14 +4,11 @@ const asyncHandler = require('express-async-handler')
 
 const register = asyncHandler(async (req,res,next) => {
     // TODO: POST DATA
-    const name = "Alpvczazaer"
-    const email = "alpfdvce77r1@alper.com"
-    const password = "123"
 
     const user = await User.create({
-        name,
-        email,
-        password
+        name: req.body.name,
+        email: req.body.email,
+        password: req.body.password
     });
 
     res

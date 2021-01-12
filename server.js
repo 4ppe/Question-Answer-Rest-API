@@ -15,7 +15,10 @@ connectDatabase()
 const app = express();
 const PORT = process.env.PORT;
 
-// Routers Middlewares
+// Express - Body Middleware
+app.use(express.json());
+
+// Routers Middleware
 app.use("/api",routers);
 
 
