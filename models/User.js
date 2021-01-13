@@ -1,5 +1,6 @@
 const mongoose = require("mongoose")
 const Schema = mongoose.Schema
+const bcrypt = require('bcryptjs')
 
 const UserSchema = new Schema({
     name:  {
@@ -42,6 +43,17 @@ const UserSchema = new Schema({
         type: Boolean,
         default: false
     }
-  });
+});
 
-  module.exports = mongoose.model("User",UserSchema)
+
+UserSchema.pre('save', async function() {
+    
+    //if the user was updated but the password was not changed
+    if(!this.isModified("password")){ return; }
+
+    console.log("Pre hooks: Save");
+    console.log(this.password);
+    this.password = await bcrypt.hash(this.password,10);
+});
+
+module.exports = mongoose.model("User",UserSchema)
