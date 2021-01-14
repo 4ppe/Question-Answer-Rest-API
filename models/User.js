@@ -1,11 +1,12 @@
 const mongoose = require("mongoose")
 const Schema = mongoose.Schema
 const bcrypt = require('bcryptjs')
+const jwt = require("jsonwebtoken")
 
 const UserSchema = new Schema({
     name:  {
         type:String,
-        required : [true, "Please provide a name"]
+        required : true
     },
     email: {
         type: String,
@@ -45,7 +46,22 @@ const UserSchema = new Schema({
     }
 });
 
+// UserSchema method
+UserSchema.methods.generateJwtFromUser = function(){
+    const{JWT_SECRET_KEY, JWT_EXPIRE} = process.env;
 
+    const payload = {
+        id: this._id,
+        name: this.name
+    };
+
+    const token = jwt.sign(payload, JWT_SECRET_KEY, {
+        expiresIn: JWT_EXPIRE
+    });
+    return token
+}
+
+// Pre hooks
 UserSchema.pre('save', async function() {
     
     //if the user was updated but the password was not changed
