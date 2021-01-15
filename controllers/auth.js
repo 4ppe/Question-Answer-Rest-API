@@ -1,8 +1,9 @@
 const User = require("../models/User");
 const CustomError = require("../helpers/error/CustomError");
 const asyncHandler = require('express-async-handler')
+const sendJwtToClient = require('../helpers/authorization/sendJwtToClient')
 
-const register = asyncHandler(async (req,res,next) => {
+const register = asyncHandler(async (req, res, next) => {
 
     const user = await User.create({
         name: req.body.name,
@@ -10,15 +11,7 @@ const register = asyncHandler(async (req,res,next) => {
         password: req.body.password
     });
 
-    const token = user.generateJwtFromUser();
-    console.log(token)
-    
-    res
-    .status(200)
-    .json({
-        success: true,
-        data: user
-    })
+    sendJwtToClient(user,res);
 })
 
 // TEST
