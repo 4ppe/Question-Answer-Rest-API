@@ -7,7 +7,7 @@ const  sendJwtToClient  = (user, res) => {
     .status(200)
     .cookie("access_token",token,{
         httpOnly: true,
-        expires: new Date(Date.now() + parseInt(JWT_COOKIE) * 1000), // 10sec
+        expires: new Date(Date.now() + parseInt(JWT_COOKIE) * 1000 * 60), // 10min
     })
     .json({
         succes: true,
