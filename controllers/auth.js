@@ -26,10 +26,7 @@ const login = asyncHandler(async (req, res, next) => {
     sendJwtToClient(user,res);
 
     console.log(user);
-    res.status(200)
-    .json({
-        success: true
-    });
+ 
 
 })
 
