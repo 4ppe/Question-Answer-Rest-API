@@ -66,7 +66,7 @@ const imageUpload = asyncHandler(async (req, res, next) => {
     });
 });
 
-const resetPassword = asyncHandler(async (req, res, next) => {
+const forgotPassword = asyncHandler(async (req, res, next) => {
     
     const resetEmail = req.body.email
 
@@ -77,6 +77,9 @@ const resetPassword = asyncHandler(async (req, res, next) => {
     const resetPasswordToken = user.getResetPasswordTokenFromUser();
 
     await user.save();
+
+     
+
     res.status(200)
     .json({
         success: true,
@@ -91,5 +94,5 @@ module.exports = {
     login,
     logout,
     imageUpload,
-    resetPassword
+    forgotPassword
 }
