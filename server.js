@@ -30,6 +30,8 @@ app.get("/",(req,res) => {
 // Error handler
 app.use(customErrorHandler)
 
+// Static Files
+app.use(express.static('public'))
 
 app.listen(PORT, () => {
     console.log(`App started on ${PORT} : ${process.env.NODE_ENV}`);
