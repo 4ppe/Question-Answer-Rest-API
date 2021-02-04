@@ -15,6 +15,20 @@ const blockUser = asyncHandler(async(req, res, next) => {
     })
 });
 
+const deleteUser = asyncHandler(async(req, res, next) => {
+    const {id} = req.params;
+    const user = await User.findById(id)
+
+    await user.remove();
+
+    res.status(200)
+    .json({
+        success: true,
+        message: "Delete User Succesfull"
+    })
+});
+
 module.exports = {
-    blockUser
+    blockUser,
+    deleteUser
 }
