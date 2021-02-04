@@ -14,6 +14,16 @@ const askNewQuestion = asyncHandler(async (req, res, next) => {
     });
 });
 
+
+const getAllQuestions = asyncHandler(async (req, res, next) => {
+   
+    const questions = await Question.find();
+    res.status(200).json({
+        success: true,
+        data: questions
+    });
+});
 module.exports = {
-    askNewQuestion
+    askNewQuestion,
+    getAllQuestions
 };
