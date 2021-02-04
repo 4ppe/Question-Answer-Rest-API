@@ -110,11 +110,41 @@ const forgotPassword = asyncHandler(async (req, res, next) => {
  
 });
 
+const resetPassword = asyncHandler(async (req, res, next) => {
+
+    const {resetPasswordToken} = req.query;
+    const {password} = req.body;
+    if(!resetPasswordToken){
+        return next(new CustomError("Please provide a valid token",400));
+    }
+    let user = await User.findOne({
+        resetPasswordToken : resetPasswordToken,
+        resetPasswordExpire :{$gt : Date.now()}
+    });
+
+    if(!user){
+        return next(new CustomError("Invalid token or session expired",400));
+    }
+
+    user.password = password;
+    user.resetPasswordToken = undefined;
+    user.resetPasswordExpire = undefined;
+    
+    await user.save();
+
+    res.status(200)
+    .json({
+        success: true,
+        message: "Reset password success"
+    });
+});
+
 module.exports = {
     register,
     getUser,
     login,
     logout,
     imageUpload,
-    forgotPassword
+    forgotPassword,
+    resetPassword
 }
