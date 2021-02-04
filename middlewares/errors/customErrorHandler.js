@@ -2,7 +2,7 @@ const CustomError = require("../../helpers/error/CustomError")
 
 const customErrorHandler = (err, req, res, next) => {  
     let customError = err;
-    console.log(err)
+    //console.log(err)
     if (err.name === "SyntaxError") {
         customError = new CustomError("Unexpected Syntax",400)
     }
@@ -11,6 +11,9 @@ const customErrorHandler = (err, req, res, next) => {
     }
     if (err.code === 11000) {
         customError = new CustomError("Dublicate Key Found : Check Your Input",400)
+    }
+    if (err.name === "CastError") {
+        customError = new CustomError("Please provide valid id",400)
     }
     //console.log(customError.message, customError.status)
     
