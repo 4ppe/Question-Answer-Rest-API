@@ -3,13 +3,8 @@ const CustomError = require("../helpers/error/CustomError");
 const asyncHandler = require("express-async-handler");
 
 const getSingleUser = asyncHandler(async (req, res, next) => {
-    const {id} = req.params;
 
-    const user = await User.findById(id);
-
-    if (!user) {
-        return next(new CustomError("There is no such user with that id",400))
-    }
+    const user = await req.data;
 
     return res.status(200)
     .json({
