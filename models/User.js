@@ -3,6 +3,7 @@ const Schema = mongoose.Schema
 const bcrypt = require("bcryptjs")
 const jwt = require("jsonwebtoken")
 const crypto = require("crypto")
+const Question = require("./Question")
 
 const UserSchema = new Schema({
     name: {
@@ -93,6 +94,15 @@ UserSchema.pre('save', async function () {
         return;
     }
     this.password = await bcrypt.hash(this.password, 10);
+});
+
+// Post hooks
+UserSchema.post('remove', async function () {
+
+    await Question.deleteMany({
+        user: this._id
+    });
+    
 });
 
 //TODO delete all questions of removed user 
