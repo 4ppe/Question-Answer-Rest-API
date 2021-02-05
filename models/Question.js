@@ -3,16 +3,16 @@ const Schema = mongoose.Schema
 const slugify = require("slugify")
 
 const QuestionSchema = new Schema({
-    title:{
+    title: {
         type: String,
         required: [true, "Please provide a title"],
-        minlength: [10,"Please provide a title at least 10 characters"],
+        minlength: [10, "Please provide a title at least 10 characters"],
         unique: true
     },
-    content:{
+    content: {
         type: String,
         required: [true, "Please provide a content"],
-        minlength: [20,"Please provide a content at least 20 characters"],
+        minlength: [20, "Please provide a content at least 20 characters"],
         unique: true
     },
     slug: String,
@@ -27,19 +27,19 @@ const QuestionSchema = new Schema({
     }
 });
 
-QuestionSchema.pre("save", function(next){
-    if(!this.isModified("title")){
+QuestionSchema.pre("save", function (next) {
+    if (!this.isModified("title")) {
         next();
     }
     this.slug = this.makeSlug();
     next();
 
 });
-QuestionSchema.methods.makeSlug = function(){
+QuestionSchema.methods.makeSlug = function () {
     return slugify(this.title, {
         replacement: '-',
-        remove: /[*+~.()'"!:@]/g, 
+        remove: /[*+~.()'"!:@]/g,
         lower: true,
-      })
+    })
 }
-module.exports = mongoose.model("Question",QuestionSchema)
+module.exports = mongoose.model("Question", QuestionSchema)

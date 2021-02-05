@@ -1,6 +1,7 @@
 // api/auth
 const express = require('express');
-const {register,
+const {
+    register,
     getUser,
     login,
     logout,
@@ -9,13 +10,15 @@ const {register,
     resetPassword,
     editDetails
 } = require('../controllers/auth')
-const { getAccessToRoute } = require('../middlewares/authorization/auth')
+const {
+    getAccessToRoute
+} = require('../middlewares/authorization/auth')
 const profileImageUpload = require('../middlewares/libraries/progileImageUpload')
 
 const router = express.Router();
 
-router.post("/register",register);
-router.post("/login",login);
+router.post("/register", register);
+router.post("/login", login);
 router.post(
     "/upload",
     [getAccessToRoute, profileImageUpload.single("profile_image")],

@@ -7,7 +7,7 @@ const customErrorHandler = require('./middlewares/errors/customErrorHandler')
 
 // Environment Variables
 dotenv.config({
-    path : "./config/env/config.env"
+    path: "./config/env/config.env"
 });
 
 // MongoDB connection
@@ -20,10 +20,10 @@ const PORT = process.env.PORT;
 app.use(express.json());
 
 // Routers Middleware
-app.use("/api",routers);
+app.use("/api", routers);
 
 
-app.get("/",(req,res) => {
+app.get("/", (req, res) => {
     res.send("my API");
 });
 

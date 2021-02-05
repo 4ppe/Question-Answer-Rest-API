@@ -5,9 +5,9 @@ const jwt = require("jsonwebtoken")
 const crypto = require("crypto")
 
 const UserSchema = new Schema({
-    name:  {
-        type:String,
-        required : true
+    name: {
+        type: String,
+        required: true
     },
     email: {
         type: String,
@@ -23,19 +23,19 @@ const UserSchema = new Schema({
         default: "user",
         enum: ["user", "admin"]
     },
-    password: { 
-        type: String, 
+    password: {
+        type: String,
         required: [true, "Please provide a password"],
         select: false,
-        minlength:[6, "Password length must be at least 6"]
+        minlength: [6, "Password length must be at least 6"]
     },
     createdAt: {
         type: Date,
         default: Date.now
     },
-    title:   String,
-    about:   String,
-    place:   String,
+    title: String,
+    about: String,
+    place: String,
     website: String,
     profile_image: {
         type: String,
@@ -50,14 +50,16 @@ const UserSchema = new Schema({
 });
 
 // Reset Password
-UserSchema.methods.getResetPasswordTokenFromUser = function(){
+UserSchema.methods.getResetPasswordTokenFromUser = function () {
     const randomHexString = crypto.randomBytes(15).toString("hex");
-    const {RESET_PASSWORD_EXPIRE} = process.env;
+    const {
+        RESET_PASSWORD_EXPIRE
+    } = process.env;
     const resetPasswordToken = crypto
-    .createHash("SHA256")
-    .update(randomHexString)
-    .digest("hex");
-   
+        .createHash("SHA256")
+        .update(randomHexString)
+        .digest("hex");
+
     this.resetPasswordToken = resetPasswordToken;
     this.resetPasswordExpire = Date.now() + parseInt(RESET_PASSWORD_EXPIRE);
 
@@ -66,8 +68,11 @@ UserSchema.methods.getResetPasswordTokenFromUser = function(){
 
 
 // UserSchema method
-UserSchema.methods.generateJwtFromUser = function(){
-    const{JWT_SECRET_KEY, JWT_EXPIRE} = process.env;
+UserSchema.methods.generateJwtFromUser = function () {
+    const {
+        JWT_SECRET_KEY,
+        JWT_EXPIRE
+    } = process.env;
 
     const payload = {
         id: this._id,
@@ -81,16 +86,18 @@ UserSchema.methods.generateJwtFromUser = function(){
 }
 
 // Pre hooks
-UserSchema.pre('save', async function() {
-    
+UserSchema.pre('save', async function () {
+
     //if the user was updated but the password was not changed
-    if(!this.isModified("password")){ return; }
+    if (!this.isModified("password")) {
+        return;
+    }
 
     console.log("Pre hooks: Save");
     console.log(this.password);
-    this.password = await bcrypt.hash(this.password,10);
+    this.password = await bcrypt.hash(this.password, 10);
 });
 
 //TODO delete all questions of removed user 
 
-module.exports = mongoose.model("User",UserSchema)
+module.exports = mongoose.model("User", UserSchema)
