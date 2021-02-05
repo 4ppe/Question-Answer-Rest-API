@@ -102,7 +102,7 @@ UserSchema.post('remove', async function () {
     await Question.deleteMany({
         user: this._id
     });
-    
+
 });
 
 //TODO delete all questions of removed user 
