@@ -6,6 +6,7 @@ const {
 } = require('../../helpers/authorization/tokenHelpers');
 const asyncHandler = require("express-async-handler");
 const User = require("../../models/User")
+const Question = require("../../models/Question")
 
 const getAccessToRoute = (req, res, next) => {
     const {
@@ -46,8 +47,20 @@ const getAdminAccess = asyncHandler(async (req, res, next) => {
     next();
 });
 
+const getQuestionOwnerAccess = asyncHandler(async (req, res, next) => {
+    const userId = req.user.id;
+    const questionId = req.params.id;
+
+    const question = await Question.findById(questionId)
+
+    if (question.user != userId) {
+        return next(new CustomError("Only owner can access handle this operation", 403));
+    }
+    next();
+});
 
 module.exports = {
     getAccessToRoute,
-    getAdminAccess
+    getAdminAccess,
+    getQuestionOwnerAccess
 }
