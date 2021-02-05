@@ -8,7 +8,8 @@ const {
     getSingleQuestion,
     editQuestion,
     deleteQuestion,
-    likeQuestion
+    likeQuestion,
+    undolikeQuestion
 } = require("../controllers/question")
 const {
     getAccessToRoute,
@@ -22,6 +23,7 @@ router.post("/ask", getAccessToRoute, askNewQuestion);
 router.get("/", getAllQuestions);
 router.get("/:id", checkQuestionExist, getSingleQuestion);
 router.get("/:id/like", [getAccessToRoute, checkQuestionExist], likeQuestion);
+router.get("/:id/undo_like", [getAccessToRoute, checkQuestionExist], undolikeQuestion);
 router.put("/:id/edit", [getAccessToRoute, checkQuestionExist, getQuestionOwnerAccess], editQuestion);
 router.delete("/:id/delete", [getAccessToRoute, checkQuestionExist, getQuestionOwnerAccess], deleteQuestion);
 
