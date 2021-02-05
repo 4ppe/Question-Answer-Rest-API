@@ -5,10 +5,12 @@ const router = express.Router();
 const {
     askNewQuestion,
     getAllQuestions,
-    getSingleQuestion
+    getSingleQuestion,
+    editQuestion
 } = require("../controllers/question")
 const {
-    getAccessToRoute
+    getAccessToRoute,
+    getQuestionOwnerAccess
 } = require("../middlewares/authorization/auth")
 const {
     checkQuestionExist
@@ -17,5 +19,6 @@ const {
 router.post("/ask", getAccessToRoute, askNewQuestion);
 router.get("/", getAllQuestions);
 router.get("/:id", checkQuestionExist, getSingleQuestion);
+router.put("/:id/edit", [getAccessToRoute, checkQuestionExist, getQuestionOwnerAccess], editQuestion);
 
 module.exports = router;

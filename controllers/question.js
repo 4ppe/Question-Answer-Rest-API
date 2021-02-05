@@ -16,7 +16,6 @@ const askNewQuestion = asyncHandler(async (req, res, next) => {
 
 
 const getAllQuestions = asyncHandler(async (req, res, next) => {
-
     const questions = await Question.find();
     res.status(200).json({
         success: true,
@@ -26,8 +25,6 @@ const getAllQuestions = asyncHandler(async (req, res, next) => {
 
 
 const getSingleQuestion = asyncHandler(async (req, res, next) => {
-
-
     const question = req.data;
     res.status(200).json({
         success: true,
@@ -35,9 +32,27 @@ const getSingleQuestion = asyncHandler(async (req, res, next) => {
     });
 });
 
+const editQuestion = asyncHandler(async (req, res, next) => {
+    const information = req.body;
+    const {
+        id
+    } = req.params;
+
+    let question = await Question.findById(id)
+
+    question.title = information.title;
+    question.content = information.content;
+    question = await question.save();
+
+    return res.status(200).json({
+        success: true,
+        data: question
+    });
+});
 
 module.exports = {
     askNewQuestion,
     getAllQuestions,
-    getSingleQuestion
+    getSingleQuestion,
+    editQuestion
 };

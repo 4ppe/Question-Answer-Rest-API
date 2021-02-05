@@ -35,10 +35,6 @@ const login = asyncHandler(async (req, res, next) => {
         return next(new CustomError('Please check your credentials', 400));
     }
     sendJwtToClient(user, res);
-
-    console.log(user);
-
-
 })
 
 const getUser = asyncHandler(async (req, res, next) => {
