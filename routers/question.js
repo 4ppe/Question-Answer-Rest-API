@@ -1,6 +1,7 @@
 // api/questions
 
 const express = require('express');
+const answer = require("./answer")
 const router = express.Router();
 const {
     askNewQuestion,
@@ -26,5 +27,7 @@ router.get("/:id/like", [getAccessToRoute, checkQuestionExist], likeQuestion);
 router.get("/:id/undo_like", [getAccessToRoute, checkQuestionExist], undolikeQuestion);
 router.put("/:id/edit", [getAccessToRoute, checkQuestionExist, getQuestionOwnerAccess], editQuestion);
 router.delete("/:id/delete", [getAccessToRoute, checkQuestionExist, getQuestionOwnerAccess], deleteQuestion);
+
+router.use("/:id/answers", checkQuestionExist, answer);
 
 module.exports = router;
