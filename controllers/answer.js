@@ -14,11 +14,26 @@ const addNewAnswerToQuestion = asyncHandler(async (req, res, next) => {
         user: req.user.id,
         question: question_id
     })
- 
+
     res.status(200).json({
         success: true,
         data: answer
     });
 });
 
-module.exports = addNewAnswerToQuestion
+const getAllAnswerByQuestion = asyncHandler(async (req, res, next) => {
+    const {
+        question_id
+    } = req.params;
+    const answers = await Question.findById(question_id).populate("answer")
+    console.log(answers)
+    res.status(200).json({
+        success: true,
+        answers: answers
+    });
+});
+
+module.exports = {
+    addNewAnswerToQuestion,
+    getAllAnswerByQuestion
+}

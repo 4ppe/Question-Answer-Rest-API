@@ -7,7 +7,6 @@ const AnswerSchema = new Schema({
         type: String,
         required: [true, "Please provide a content"],
         minlength: [20, "Please provide a content at least 20 characters"],
-        unique: true
     },
     createdAt: {
         type: Date,
@@ -34,9 +33,9 @@ AnswerSchema.pre("save", async function (next) {
         if (!this.isModified("user")) return next();
         const question = await Question.findById(this.question)
         question.answers.push(this._id)
-    
+
         await question.save();
-        next();     
+        next();
     } catch (err) {
         return nect(err);
     }
