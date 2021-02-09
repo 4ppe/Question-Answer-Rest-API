@@ -33,7 +33,27 @@ const getAllAnswerByQuestion = asyncHandler(async (req, res, next) => {
     });
 });
 
+const getSingleAnswer = asyncHandler(async (req, res, next) => {
+    const {
+        answer_id
+    } = req.params;
+    const answer = await Answer.findById(answer_id)
+        .populate({
+            path: "question",
+            select: "title"
+        })
+        .populate({
+            path: "user",
+            select: "name profile_image"
+        })
+    res.status(200).json({
+        success: true,
+        answer
+    });
+});
+
 module.exports = {
     addNewAnswerToQuestion,
-    getAllAnswerByQuestion
+    getAllAnswerByQuestion,
+    getSingleAnswer
 }
