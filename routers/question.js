@@ -28,6 +28,6 @@ router.get("/:id/undo_like", [getAccessToRoute, checkQuestionExist], undolikeQue
 router.put("/:id/edit", [getAccessToRoute, checkQuestionExist, getQuestionOwnerAccess], editQuestion);
 router.delete("/:id/delete", [getAccessToRoute, checkQuestionExist, getQuestionOwnerAccess], deleteQuestion);
 
-router.use("/:id/answers", checkQuestionExist, answer);
+router.use("/:question_id/answers", checkQuestionExist, answer);
 
 module.exports = router;
