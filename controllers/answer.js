@@ -52,8 +52,26 @@ const getSingleAnswer = asyncHandler(async (req, res, next) => {
     });
 });
 
+const editAnswer = asyncHandler(async (req, res, next) => {
+    const {
+        answer_id
+    } = req.params;
+    const {
+        content
+    } = req.body;
+    const answer = await Answer.findById(answer_id)
+    answer.content = content;
+    await answer.save();
+    res.status(200).json({
+        success: true,
+        message: "answer has been changed",
+        data: answer
+    });
+});
+
 module.exports = {
     addNewAnswerToQuestion,
     getAllAnswerByQuestion,
-    getSingleAnswer
+    getSingleAnswer,
+    editAnswer
 }
