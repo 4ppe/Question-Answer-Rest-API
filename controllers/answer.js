@@ -26,7 +26,6 @@ const getAllAnswerByQuestion = asyncHandler(async (req, res, next) => {
         question_id
     } = req.params;
     const answers = await Question.findById(question_id).populate("answers")
-    console.log(answers)
     res.status(200).json({
         success: true,
         answers: answers
@@ -71,17 +70,57 @@ const editAnswer = asyncHandler(async (req, res, next) => {
 
 const deleteAnswer = asyncHandler(async (req, res, next) => {
     const {
-        answer_id, question_id
+        answer_id,
+        question_id
     } = req.params;
 
     await Answer.findByIdAndRemove(answer_id);
 
     const question = await Question.findById(question_id)
-    question.answers.splice(question.answers.indexOf(answer_id),1);
+    question.answers.splice(question.answers.indexOf(answer_id), 1);
     await question.save();
     res.status(200).json({
         success: true,
         message: "answer has been deleted",
+    });
+});
+
+const likeAnswer = asyncHandler(async (req, res, next) => {
+    const {
+        answer_id
+    } = req.params;
+
+    const answer = await Answer.findById(answer_id)
+    if (answer.likes.includes(req.user.id)) {
+        return next(new CustomError("You already liked this answer", 400));
+    }
+    answer.likes.push(req.user.id);
+    await answer.save();
+
+    return res.status(200).json({
+        success: true,
+        data: answer
+    });
+});
+
+const undoLikeAnswer = asyncHandler(async (req, res, next) => {
+    const {
+        answer_id
+    } = req.params;
+
+    const answer = await Answer.findById(answer_id)
+
+    if (!answer.likes.includes(req.user.id)) {
+        return next(new CustomError("You can not undo like operation for this answer", 400));
+    }
+
+    const index = await answer.likes.indexOf(req.user.id);
+    answer.likes.splice(index, 1);
+    await answer.save();
+
+    return res.status(200).json({
+        success: true,
+        data: answer
     });
 });
 
@@ -90,5 +129,7 @@ module.exports = {
     getAllAnswerByQuestion,
     getSingleAnswer,
     editAnswer,
-    deleteAnswer
+    deleteAnswer,
+    likeAnswer,
+    undoLikeAnswer
 }

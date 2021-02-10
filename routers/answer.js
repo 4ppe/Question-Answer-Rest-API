@@ -11,7 +11,9 @@ const {
     getAllAnswerByQuestion,
     getSingleAnswer,
     editAnswer,
-    deleteAnswer
+    deleteAnswer,
+    likeAnswer,
+    undoLikeAnswer
 } = require("../controllers/answer")
 
 const router = express.Router({
@@ -21,6 +23,8 @@ const router = express.Router({
 router.post("/", getAccessToRoute, addNewAnswerToQuestion);
 router.get("/", getAllAnswerByQuestion);
 router.get("/:answer_id",checkQuestionAndAnswerExist, getSingleAnswer);
+router.get("/:answer_id/like",[checkQuestionAndAnswerExist, getAccessToRoute], likeAnswer);
+router.get("/:answer_id/undolike",[checkQuestionAndAnswerExist, getAccessToRoute], undoLikeAnswer);
 router.put("/:answer_id/edit",[checkQuestionAndAnswerExist, getAccessToRoute,getAnswerOwnerAccess], editAnswer);
 router.delete("/:answer_id/delete",[checkQuestionAndAnswerExist, getAccessToRoute,getAnswerOwnerAccess], deleteAnswer);
 
