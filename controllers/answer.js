@@ -25,7 +25,7 @@ const getAllAnswerByQuestion = asyncHandler(async (req, res, next) => {
     const {
         question_id
     } = req.params;
-    const answers = await Question.findById(question_id).populate("answer")
+    const answers = await Question.findById(question_id).populate("answers")
     console.log(answers)
     res.status(200).json({
         success: true,
@@ -69,9 +69,26 @@ const editAnswer = asyncHandler(async (req, res, next) => {
     });
 });
 
+const deleteAnswer = asyncHandler(async (req, res, next) => {
+    const {
+        answer_id, question_id
+    } = req.params;
+
+    await Answer.findByIdAndRemove(answer_id);
+
+    const question = await Question.findById(question_id)
+    question.answers.splice(question.answers.indexOf(answer_id),1);
+    await question.save();
+    res.status(200).json({
+        success: true,
+        message: "answer has been deleted",
+    });
+});
+
 module.exports = {
     addNewAnswerToQuestion,
     getAllAnswerByQuestion,
     getSingleAnswer,
-    editAnswer
+    editAnswer,
+    deleteAnswer
 }
