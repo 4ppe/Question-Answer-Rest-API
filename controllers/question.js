@@ -22,6 +22,7 @@ const getAllQuestions = asyncHandler(async (req, res, next) => {
         path: "user",
         select: "name profile_image"
     };
+    // Search
     if (req.query.search) {
         const searchObject = {};
         const regex = new RegExp(req.query.search, "i");
@@ -29,12 +30,42 @@ const getAllQuestions = asyncHandler(async (req, res, next) => {
 
         query = query.where(searchObject)
     };
+    // Populate
     if (populate) {
         query = query.populate(populateObject)
     }
+    // Pagination
+
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 5;
+    console.log(typeof limit);
+    console.log(limit)
+    const startIndex = (page - 1) * limit
+    const endIndex = page * limit;
+
+    const pagination = {};
+    const total = await Question.countDocuments();
+
+    if (startIndex > 0) {
+        pagination.previous = {
+            page: page - 1,
+            limit: limit
+        }
+    }
+    if (endIndex < total) {
+        pagination.next = {
+            page: page + 1,
+            limit: limit
+        }
+    }
+
+    query = query.skip(startIndex).limit(limit)
+
     const questions = await query;
     res.status(200).json({
         success: true,
+        count: questions.length,
+        pagination: pagination,
         data: questions
     });
 });
