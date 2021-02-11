@@ -31,7 +31,7 @@ const login = asyncHandler(async (req, res, next) => {
     const user = await User.findOne({
         email
     }).select("+password");
-    if (!comparePassword(password, user.password)) {
+    if (!user || !comparePassword(password, user.password)) {
         return next(new CustomError('Please check your credentials', 400));
     }
     sendJwtToClient(user, res);
