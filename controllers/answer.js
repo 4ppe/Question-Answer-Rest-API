@@ -78,6 +78,7 @@ const deleteAnswer = asyncHandler(async (req, res, next) => {
 
     const question = await Question.findById(question_id)
     question.answers.splice(question.answers.indexOf(answer_id), 1);
+    quesyion.answerCount = question.answers.lenght;
     await question.save();
     res.status(200).json({
         success: true,
