@@ -16,7 +16,15 @@ const askNewQuestion = asyncHandler(async (req, res, next) => {
 
 
 const getAllQuestions = asyncHandler(async (req, res, next) => {
-    const questions = await Question.find();
+    let query = Question.find();
+    if (req.query.search) {
+        const searchObject = {};
+        const regex = new RegExp(req.query.search, "i");
+        searchObject["title"] = regex;
+
+        query = query.where(searchObject)
+    }
+    const questions = await query;
     res.status(200).json({
         success: true,
         data: questions
