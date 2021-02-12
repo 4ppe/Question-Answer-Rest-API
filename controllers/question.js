@@ -38,7 +38,7 @@ const getAllQuestions = asyncHandler(async (req, res, next) => {
 
     const page = parseInt(req.query.page) || 1;
     const limit = parseInt(req.query.limit) || 5;
-    
+
     const startIndex = (page - 1) * limit
     const endIndex = page * limit;
 
@@ -60,6 +60,17 @@ const getAllQuestions = asyncHandler(async (req, res, next) => {
 
     query = query.skip(startIndex).limit(limit)
 
+    // sort : req.query.sortBy most-answered most-liked
+
+    const sortKey = req.query.sortBy;
+    if (sortKey === "most-answered") {
+        query = query.sort("-answerCount -createdAt");
+    }
+    if (sortKey === "most-liked") {
+        query = query.sort("-likeCount -createdAt");
+    } else {
+        query = query.sort("-createdAt");
+    }
     const questions = await query;
     res.status(200).json({
         success: true,
@@ -121,7 +132,7 @@ const likeQuestion = asyncHandler(async (req, res, next) => {
     }
     question.likes.push(req.user.id);
     question.likeCount = question.likes.length
-    
+
     await question.save();
 
     return res.status(200).json({
