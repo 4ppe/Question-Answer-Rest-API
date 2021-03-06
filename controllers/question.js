@@ -21,11 +21,7 @@ const getAllQuestions = asyncHandler(async (req, res, next) => {
 
 
 const getSingleQuestion = asyncHandler(async (req, res, next) => {
-    const question = req.data;
-    res.status(200).json({
-        success: true,
-        data: question
-    });
+    res.status(200).json(res.queryResults);
 });
 
 const editQuestion = asyncHandler(async (req, res, next) => {
